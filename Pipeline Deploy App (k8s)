@@ -10,11 +10,11 @@ pool:
 parameters:
 - name: 'layer'
   values: 
-    - hgs-cis-prd
+    - name_of_project-cis-prd
 
 - name: 'namespace'
   values: 
-    - hgs-cis-prd
+    - name_of_project-cis-prd
 
 stages:
   - stage: Helm_Deploy
@@ -31,7 +31,7 @@ stages:
             - task: HelmDeploy@0
               inputs:
                 connectionType: 'Kubernetes Service Connection'
-                kubernetesServiceConnection: 'hgsid-prd-aks'
+                kubernetesServiceConnection: 'name_of_project-prd-aks'
                 namespace: '${{ parameters.namespace }}'
                 command: 'upgrade'
                 chartType: 'FilePath'
@@ -45,5 +45,5 @@ stages:
 				
 #Variables
 #image_tag = version 4.13
-#imagename = hgs-develop-app
-#mgshgs_acr_name= hgststacr.azurecr.io
+#imagename = name_of_project-develop-app
+#mgshgs_acr_name= Storage_acc.azurecr.io
