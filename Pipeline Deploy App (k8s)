@@ -1,0 +1,49 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+parameters:
+- name: 'layer'
+  values: 
+    - hgs-cis-prd
+
+- name: 'namespace'
+  values: 
+    - hgs-cis-prd
+
+stages:
+  - stage: Helm_Deploy
+    displayName: 'Helm_Deploy'
+    condition: always()
+    jobs:
+      - job: helm_install
+        displayName: helm_install
+        steps:
+            - task: HelmInstaller@0
+              inputs:
+                helmVersion: '2.14.1'
+                installKubectl: true
+            - task: HelmDeploy@0
+              inputs:
+                connectionType: 'Kubernetes Service Connection'
+                kubernetesServiceConnection: 'hgsid-prd-aks'
+                namespace: '${{ parameters.namespace }}'
+                command: 'upgrade'
+                chartType: 'FilePath'
+                chartPath: 'helm/idit-helm/idit'
+                releaseName: '${{ parameters.layer }}'
+                overrideValues: 'iditImageTag=$(image_tag)'
+                valueFile: 'helm/idit-helm/${{ parameters.layer }}.yaml'
+                waitForExecution: false
+                arguments: '--set rbac.create=false'
+				
+				
+#Variables
+#image_tag = version 4.13
+#imagename = hgs-develop-app
+#mgshgs_acr_name= hgststacr.azurecr.io
