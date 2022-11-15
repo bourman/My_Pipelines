@@ -1,0 +1,59 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+#---------[Pipeline for Restart Application on Pre Prod servers!]
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+#   
+parameters:
+- name: 'pprd_app_stop'
+  values: 
+     - Gjidc-pprd-app1
+     - Gjidc-pprd-app2
+     - Gjidc-pprd-app3
+     - Gjidc-pprd-app4
+- name: 'pprd_app_start'
+  values: 
+     - Gjidc-pprd-app1
+     - Gjidc-pprd-app2
+     - Gjidc-pprd-app3
+     - Gjidc-pprd-app4
+
+
+#Stage 1 - shutting-down jboss-9001
+stages:
+  - stage: Stop_Jboss_Server
+    displayName: Stop_Jboss_Server
+    #condition: always()
+    jobs:
+      - job: Stop_JBoss
+        displayName: Stop_Jboss
+      - deployment: 'Stop_Jboss_Server'
+        environment:
+         name: ${{ parameters.pprd_app_stop }}
+         resourceType: VirtualMachine
+        strategy:
+         runOnce:
+           deploy:
+            steps:
+              - script: net stop jboss-9001
+              - powershell: Start-Sleep -Seconds 90
+#Stage 2 - start the jboss-9001
+  - stage: Start_Jboss
+    displayName: 'Start_Jboss'
+    #condition: always()
+    jobs:
+      - job: Start_JBosss
+        displayName: Start_Jboss
+      - deployment: 'Start_Jboss_Server'
+        environment:
+         name: ${{ parameters.pprd_app_start }}
+         resourceType: VirtualMachine
+        strategy:
+         runOnce:
+           deploy:
+            steps:             
+              - script: net start jboss-9001

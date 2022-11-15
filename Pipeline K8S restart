@@ -1,0 +1,62 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+parameters:
+- name: 'deploymentname'
+  type: object
+  default:
+    - idit-online
+
+- name: 'namespace'
+  values:
+    - hgs-cis-epictest
+    - hgs-cis-systest
+    - hgs-cis-reptest
+    - hgs-cis-migtest
+    - hgs-cis-tbc
+    - hgs-cis-emstest
+
+stages:
+  - stage: Deployment_Restart
+    displayName: Deployment_Restart
+    condition: always()
+    jobs:
+    - job: DeploymentRestart
+      displayName: 'Deployment_Restart'
+      steps:
+      - ${{ each p in parameters.deploymentname }}: 
+        - task: Kubernetes@1
+          displayName: Running Restart on ${{p}}
+          inputs:
+            connectionType: 'Kubernetes Service Connection'
+            kubernetesServiceEndpoint: 'hgsid-tst-aks'
+            namespace: '${{ parameters.namespace }}'
+            command: 'rollout'
+            arguments: 'restart deploy ${{p}}'
+            checkLatest: true
+            outputFormat: 'yaml'
+      - bash: sleep 90  
+  - stage: GetPodStatus
+    displayName: 'Get_Pod_Status'
+    condition: always()
+    jobs:
+    - job: GetPodStatus
+      displayName: 'Get_Pod_Status'
+      steps:
+        - task: Kubernetes@1
+          displayName: Getting Pod Status Post Restart
+          inputs:
+            connectionType: 'Kubernetes Service Connection'
+            kubernetesServiceEndpoint: 'hgsid-tst-aks'
+            namespace: '${{ parameters.namespace }}'
+            command: 'get'
+            arguments: 'pods'
+            checkLatest: true
+            outputFormat: 'none'

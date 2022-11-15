@@ -1,0 +1,36 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+   
+parameters:
+- name: 'pprd_db'
+  values: 
+     - gjidc-pprd-db1
+     - gjidc-pprd-db2
+- name: 'layer'
+  values: 
+    - GF_PREPROD
+stages:
+  - stage: SQL_test
+    displayName: SQL_test
+    condition: always()
+    jobs:
+      - job: SQL_test
+        displayName: 'SQL_test'
+      - deployment: SQL_test_job
+        environment:
+         name: ${{ parameters.pprd_db }}
+         resourceType: VirtualMachine
+        strategy:
+         runOnce:
+           deploy:
+            steps:
+              - script: sqlcmd -s $(Server_name) -U $(db_username) -P $(db_password) -i "F:\DB_SQL_Backup_Script\${{ parameters.layer }}_BackupScript.sql"
+              - powershell: net use \\gjpncdbchanges.file.core.windows.net\pnc /USER:`"Azure\gjpncdbchanges`" $(share_password)
+              - powershell: Copy-Item -Path "\\gjpncdbchanges.file.core.windows.net\pnc\develop\$(image_version)" -Destination "F:\DB_Changes" -Force -Recurse
