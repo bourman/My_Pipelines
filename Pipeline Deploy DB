@@ -13,7 +13,7 @@ pool:
 parameters:
 - name: 'layer'
   values: 
-    - HGS_CIS_PROD
+    - name_of_project_CIS_PROD
 stages:
   - stage: SQL_Backup
     displayName: SQL_Backup
@@ -23,15 +23,15 @@ stages:
         displayName: 'SQL_Backup'
       - deployment: SQL_Backup_TO_BLOB
         environment:
-         name: hgsid-prd
+         name: name_of_project-prd
          resourceType: VirtualMachine
         strategy:
          runOnce:
            deploy:
             steps:
-              - script: sqlcmd -s hgs-prd-dbls -U $(db_username) -P $(db_password) -i "F:\DB_SQL_Backup_Script\${{ parameters.layer }}_BackupScript.sql"
-              - powershell: net use \\mgsiditdbchanges.file.core.windows.net\idit /USER:`"Azure\mgsiditdbchanges`" $(share_password)
-              - powershell: Copy-Item -Path "\\mgsiditdbchanges.file.core.windows.net\idit\HGS\develop\DBChanges\$(image_version)" -Destination "F:\DB_Changes\" -Force -Recurse
+              - script: sqlcmd -s name_of_project-prd-dbls -U $(db_username) -P $(db_password) -i "F:\DB_SQL_Backup_Script\${{ parameters.layer }}_BackupScript.sql"
+              - powershell: net use \\name_of_project_storageacc.file.core.windows.net\name_of_app /USER:`"Azure\name_of_project_storageacc`" $(share_password)
+              - powershell: Copy-Item -Path "\\name_of_project_storageacc.file.core.windows.net\name_of_app\name_of_folder\develop\DBChanges\$(image_version)" -Destination "F:\DB_Changes\" -Force -Recurse
 ###################################################################
 #Stage 2 - Install DB
   - stage: DB_Change
@@ -43,7 +43,7 @@ stages:
       - deployment: VMDeploy
         displayName: Deploy to VM
         environment:
-          name: hgsid-prd
+          name: name_of_project-prd
           resourceType: VirtualMachine
         strategy:
           runOnce:
