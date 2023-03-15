@@ -10,11 +10,11 @@ pool:
 parameters:
 - name: 'layer'
   values: 
-    - name_of_project-cis-prd
+    - name_of_project-prd
 
 - name: 'namespace'
   values: 
-    - name_of_project-cis-prd
+    - name_of_project-prd
 
 stages:
   - stage: Helm_Deploy
@@ -35,10 +35,10 @@ stages:
                 namespace: '${{ parameters.namespace }}'
                 command: 'upgrade'
                 chartType: 'FilePath'
-                chartPath: 'helm/idit-helm/idit'
+                chartPath: 'helm/idit-helm/name'
                 releaseName: '${{ parameters.layer }}'
-                overrideValues: 'iditImageTag=$(image_tag)'
-                valueFile: 'helm/idit-helm/${{ parameters.layer }}.yaml'
+                overrideValues: 'nameImageTag=$(image_tag)'
+                valueFile: 'helm/name-helm/${{ parameters.layer }}.yaml'
                 waitForExecution: false
                 arguments: '--set rbac.create=false'
 				
@@ -46,4 +46,4 @@ stages:
 #Variables
 #image_tag = version 4.13
 #imagename = name_of_project-develop-app
-#mgshgs_acr_name= Storage_acc.azurecr.io
+#acr_name= Storage_acc.azurecr.io
