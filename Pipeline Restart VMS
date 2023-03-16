@@ -11,16 +11,16 @@ pool:
 parameters:
 - name: 'pprd_app_stop'
   values: 
-     - Gjidc-pprd-app1
-     - Gjidc-pprd-app2
-     - Gjidc-pprd-app3
-     - Gjidc-pprd-app4
+     - Name-pprd-app1
+     - Name-pprd-app2
+     - Name-pprd-app3
+     - Name-pprd-app4
 - name: 'pprd_app_start'
   values: 
-     - Gjidc-pprd-app1
-     - Gjidc-pprd-app2
-     - Gjidc-pprd-app3
-     - Gjidc-pprd-app4
+     - Name-pprd-app1
+     - Name-pprd-app2
+     - Name-pprd-app3
+     - Name-pprd-app4
 
 
 #Stage 1 - shutting-down jboss-9001
@@ -57,3 +57,5 @@ stages:
            deploy:
             steps:             
               - script: net start jboss-9001
+
+# Jboss-9001 name of the application inside the VM.
