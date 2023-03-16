@@ -49,4 +49,4 @@ stages:
           runOnce:
               deploy:
                 steps:
-                  - script: hostname && cd "$(IDIT_PM)" && dbcp.cli.cmd db.type-names Oracle,DB2,MSSQL db.types.selected 2 db.username $(db_username) db.password $(db_password) db.url jdbc:jtds:sqlserver://$(Server_IP):1433;DatabaseName=${{ parameters.layer }};Instance= filename "F:\DB_Changes\$(image_version)"
+                  - script: hostname && cd "$(NAME)" && dbcp.cli.cmd db.type-names Oracle,DB2,MSSQL db.types.selected 2 db.username $(db_username) db.password $(db_password) db.url jdbc:jtds:sqlserver://$(Server_IP):1433;DatabaseName=${{ parameters.layer }};Instance= filename "F:\DB_Changes\$(image_version)"
