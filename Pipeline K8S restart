@@ -16,12 +16,12 @@ parameters:
 
 - name: 'namespace'
   values:
-    - hgs-cis-epictest
-    - hgs-cis-systest
-    - hgs-cis-reptest
-    - hgs-cis-migtest
-    - hgs-cis-tbc
-    - hgs-cis-emstest
+    - hgs-cis-name1
+    - hgs-cis-name2
+    - hgs-cis-name3
+    - hgs-cis-name4
+    - hgs-cis-name5
+    - hgs-cis-name6
 
 stages:
   - stage: Deployment_Restart
@@ -36,7 +36,7 @@ stages:
           displayName: Running Restart on ${{p}}
           inputs:
             connectionType: 'Kubernetes Service Connection'
-            kubernetesServiceEndpoint: 'hgsid-tst-aks'
+            kubernetesServiceEndpoint: 'name-tst-aks'
             namespace: '${{ parameters.namespace }}'
             command: 'rollout'
             arguments: 'restart deploy ${{p}}'
@@ -54,7 +54,7 @@ stages:
           displayName: Getting Pod Status Post Restart
           inputs:
             connectionType: 'Kubernetes Service Connection'
-            kubernetesServiceEndpoint: 'hgsid-tst-aks'
+            kubernetesServiceEndpoint: 'name-tst-aks'
             namespace: '${{ parameters.namespace }}'
             command: 'get'
             arguments: 'pods'
