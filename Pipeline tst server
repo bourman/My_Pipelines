@@ -10,15 +10,15 @@ pool:
 parameters:
 - name: 'prd_app'
   values: 
-     - GJIDC-PRD-APP1
-     - GJIDC-PRD-APP2
-     - GJIDC-PRD-APP3
-     - GJIDC-PRD-APP4
+     - ApplicatioN-PRD-APP1
+     - ApplicatioN-PRD-APP2
+     - ApplicatioN-PRD-APP3
+     - ApplicatioN-PRD-APP4
 - name: ServersList
   type: object
   default:
-     - GJIDC-PRD-APP1
-     - GJIDC-PRD-APP2   
+     - ApplicatioN-PRD-APP1
+     - ApplicatioN-PRD-APP2   
 stages:
   - stage: Test
     displayName: Test
