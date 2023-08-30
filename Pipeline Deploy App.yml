@@ -46,4 +46,4 @@ stages:
 #Variables
 #image_tag = version 4.13
 #imagename = name_of_project-develop-app
-#acr_name= Storage_acc.azurecr.io
+#acr_name= Storage_acc.azurECR.io
