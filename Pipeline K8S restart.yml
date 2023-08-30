@@ -12,16 +12,16 @@ parameters:
 - name: 'deploymentname'
   type: object
   default:
-    - idit-online
+    - project-online
 
 - name: 'namespace'
   values:
-    - hgs-cis-name1
-    - hgs-cis-name2
-    - hgs-cis-name3
-    - hgs-cis-name4
-    - hgs-cis-name5
-    - hgs-cis-name6
+    - project-cis-name1
+    - project-cis-name2
+    - project-cis-name3
+    - project-cis-name4
+    - project-cis-name5
+    - project-cis-name6
 
 stages:
   - stage: Deployment_Restart
