@@ -23,7 +23,7 @@ parameters:
      - Name-pprd-app4
 
 
-#Stage 1 - shutting-down jboss-9001
+#Stage 1 - shutting-down nameof-app
 stages:
   - stage: Stop_Jboss_Server
     displayName: Stop_Jboss_Server
@@ -39,7 +39,7 @@ stages:
          runOnce:
            deploy:
             steps:
-              - script: net stop jboss-9001
+              - script: net stop nameof-app
               - powershell: Start-Sleep -Seconds 90
 #Stage 2 - start the jboss-9001
   - stage: Start_Jboss
@@ -56,6 +56,6 @@ stages:
          runOnce:
            deploy:
             steps:             
-              - script: net start jboss-9001
+              - script: net start nameof-app
 
 # Jboss-9001 name of the application inside the VM.
